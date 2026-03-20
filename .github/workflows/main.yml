@@ -23,9 +23,15 @@ jobs:
       # 3️⃣ Install LaTeX (emoji + Unicode)
       - name: Install LaTeX packages
         run: |
-          sudo apt-get install -y lualatex texlive-luatex texlive-xetex \
-          texlive-fonts-recommended texlive-latex-extra texlive-latex-recommended cm-super
-
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-luatex \
+            texlive-xetex \
+            texlive-fonts-recommended \
+            texlive-latex-extra \
+            texlive-latex-recommended \
+            cm-super
+            
       # 4️⃣ Create output folder
       - name: Create output folder
         run: mkdir -p output
