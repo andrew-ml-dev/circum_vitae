@@ -5,28 +5,44 @@ on:
     branches: [ "main" ]
 
 permissions:
-  contents: write
+  contents: write  # чтобы workflow мог пушить обратно PDF
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Сheckout repo
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      # 2️⃣ InstallPandoc
       - name: Install Pandoc
-        run: sudo apt-get install -y pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
 
-      - name: Install LaTeX
-        run: sudo apt-get install -y texlive-latex-base texlive-fonts-recommended texlive-latex-extra
+      # 3️⃣ Install LaTeX (emoji + Unicode)
+      - name: Install LaTeX packages
+        run: |
+          sudo apt-get install -y lualatex texlive-luatex texlive-xetex \
+          texlive-fonts-recommended texlive-latex-extra texlive-latex-recommended cm-super
 
+      # 4️⃣ Create output folder
       - name: Create output folder
         run: mkdir -p output
 
+      # 5️⃣ Convert Markdown to PDF
       - name: Convert Markdown to PDF
-        run: pandoc README.md -o output/cv.pdf --pdf-engine=lualatex -V geometry:margin=1in -V fontsize=11pt
+        run: |
+          pandoc README.md -o output/cv.pdf \
+            --pdf-engine=lualatex \
+            -V geometry:margin=1in \
+            -V fontsize=11pt
 
+      # 6️⃣ Debug output folder
+      - name: Debug output folder
+        run: ls -lh output
+
+      # 7️⃣ Commit PDF
       - name: Commit PDF
         run: |
           git config --local user.email "action@github.com"
