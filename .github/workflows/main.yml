@@ -25,7 +25,7 @@ jobs:
         run: mkdir -p output
 
       - name: Convert Markdown to PDF
-        run: pandoc README.md -o output/cv.pdf -V geometry:margin=1in -V fontsize=11pt
+        run: pandoc README.md -o output/cv.pdf --pdf-engine=lualatex -V geometry:margin=1in -V fontsize=11pt
 
       - name: Commit PDF
         run: |
